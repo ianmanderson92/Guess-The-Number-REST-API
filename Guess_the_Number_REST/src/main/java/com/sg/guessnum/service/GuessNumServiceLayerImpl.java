@@ -1,5 +1,8 @@
 package com.sg.guessnum.service;
 
-public class GuessNumServiceLayerImpl
+import org.springframework.stereotype.Service;
+
+@Service
+public class GuessNumServiceLayerImpl implements GuessNumServiceLayer
 {
 }
