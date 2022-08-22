@@ -7,7 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class App implements CommandLineRunner
+//public class App implements CommandLineRunner
+public class App
 {
     @Autowired
     GuessNumController controller;
@@ -15,11 +16,7 @@ public class App implements CommandLineRunner
     public static void main( String[] args )
     {
         SpringApplication.run( App.class, args );
-    }
-
-    @Override
-    public void run( String... args ) throws Exception
-    {
-        controller.run();
+        //TODO: uncomment when method rdy
+        //controller.run()
     }
 }

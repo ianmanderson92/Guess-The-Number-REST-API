@@ -7,6 +7,8 @@ import java.util.List;
 public interface GuessNumDao
 {
 
+    public Game addGame( Game game );
+
     public List<Game> getAllGames();
 
 }

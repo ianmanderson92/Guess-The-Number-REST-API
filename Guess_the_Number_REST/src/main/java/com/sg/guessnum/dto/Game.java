@@ -10,6 +10,7 @@ public class Game
     private int hundreds;
     private int tens;
     private int units;
+    private int answer;
 
     private boolean finished;
 
@@ -23,6 +24,7 @@ public class Game
         this.hundreds = hundreds;
         this.tens = tens;
         this.units = units;
+        this.answer = units + (tens * 10) + (hundreds * 100) + (thousands * 1000);
 
         this.finished = false;
     }
@@ -70,6 +72,21 @@ public class Game
     public int getUnits()
     {
         return units;
+    }
+
+    public int getAnswer()
+    {
+        return answer;
+    }
+
+    public void setAnswer()
+    {
+        this.answer = units + (tens * 10) + (hundreds * 100) + (thousands * 1000);
+    }
+
+    public void setAnswer( int answer )
+    {
+        this.answer = answer;
     }
 
     public void setUnits( int units )
