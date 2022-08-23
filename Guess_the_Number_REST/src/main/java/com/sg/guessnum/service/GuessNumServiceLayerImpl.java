@@ -3,11 +3,15 @@ package com.sg.guessnum.service;
 import com.sg.guessnum.controller.GuessNumController;
 import com.sg.guessnum.dao.GuessNumDao;
 import com.sg.guessnum.dto.Game;
+import com.sg.guessnum.dto.Guess;
+import com.sg.guessnum.dto.Round;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -55,6 +59,103 @@ public class GuessNumServiceLayerImpl implements GuessNumServiceLayer
             foundGame.setAnswer( 0 );
         }
         return foundGame;
+    }
+
+    /**
+     special method that retrieves Game object but leaves answer data intact for unfinished games.
+     * @param id
+     * @return
+     */
+    private Game getGameByIdForGuess( int id )
+    {
+        return dao.findGameById( id );
+    }
+
+    @Override
+    public Round makeGuess( Guess userGuess )
+    {
+        Game roundGame = getGameByIdForGuess( userGuess.getGameId() );
+        int[] userGuessUnitsArray = unmarshallGuessNum( userGuess.getGuessNum() );
+
+        //Compare guess with game answer and calculate results. Store results in Round object.
+
+        //@roundResultsArray [0]: exactResults, [1]: partialResults.
+        int[] roundResultsArray = calculateGuessResults( roundGame, userGuessUnitsArray );
+
+        //TODO: set game to finished if exactResults = 4.
+        if ( roundResultsArray[0] == 4 )
+        {
+            dao.finishGame( roundGame );
+        }
+
+        Round currentRound = new Round( userGuess.getGameId(), userGuess.getGuessNum(),
+            roundResultsArray[ 0 ], roundResultsArray[ 1 ] );
+
+        dao.addRound( currentRound );
+        return currentRound;
+    }
+
+    private int[] unmarshallGuessNum( int guessNum )
+    {
+        int[] userGuessUnitsArray = new int[4];
+
+        userGuessUnitsArray[0] = guessNum/1000;
+        guessNum -= ( userGuessUnitsArray[0] * 1000);
+        userGuessUnitsArray[1] = guessNum/100;
+        guessNum -= ( userGuessUnitsArray[1] * 100);
+        userGuessUnitsArray[2] = guessNum/10;
+        guessNum -= ( userGuessUnitsArray[2] * 10);
+        userGuessUnitsArray[3] = guessNum;
+
+        return userGuessUnitsArray;
+    }
+    
+    private int[] calculateGuessResults( Game roundGame, int[] userGuessUnitsArray)
+    {
+        int exactMatches = 0;
+        int partialMatches = 0;
+        
+        if( roundGame.getThousands() == userGuessUnitsArray[ 0 ])
+        {
+            exactMatches++;
+        }
+        else if ( ArrayUtils.contains( userGuessUnitsArray, roundGame.getThousands() ))
+        {
+            partialMatches++;
+        }
+
+        if( roundGame.getHundreds() == userGuessUnitsArray[1])
+        {
+            exactMatches++;
+        }
+        else if ( ArrayUtils.contains( userGuessUnitsArray, roundGame.getHundreds() ))
+        {
+            partialMatches++;
+        }
+
+        if( roundGame.getTens() == userGuessUnitsArray[2])
+        {
+            exactMatches++;
+        }
+        else if ( ArrayUtils.contains( userGuessUnitsArray, roundGame.getTens() ))
+        {
+            partialMatches++;
+        }
+
+        if( roundGame.getUnits() == userGuessUnitsArray[3])
+        {
+            exactMatches++;
+        }
+        else if ( ArrayUtils.contains( userGuessUnitsArray, roundGame.getUnits() ))
+        {
+            partialMatches++;
+        }
+
+        int[] roundResultsArray = new int[2];
+        roundResultsArray[0] = exactMatches;
+        roundResultsArray[1] = partialMatches;
+
+        return roundResultsArray;
     }
 
     @Override

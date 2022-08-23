@@ -1,6 +1,7 @@
 package com.sg.guessnum.dao;
 
 import com.sg.guessnum.dto.Game;
+import com.sg.guessnum.dto.Round;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,6 +52,38 @@ public class GuessNumDaoDBImpl implements GuessNumDao
     }
 
     @Override
+    public Round addRound( Round round )
+    {
+        final String sql = "INSERT INTO round(gameId, userGuess, roundResultsString, timestamp) " +
+            " VALUES(?,?,?,?);";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update( ( Connection connection ) ->
+        {
+            PreparedStatement prepStatement = connection.prepareStatement(
+                sql,
+                Statement.RETURN_GENERATED_KEYS );
+
+            prepStatement.setInt( 1, round.getGameId() );
+            prepStatement.setInt( 2, round.getUserGuess() );
+            prepStatement.setString( 3, round.getRoundResultsString() );
+            prepStatement.setObject( 4, round.getTimestamp() );
+            return prepStatement;
+        }, keyHolder );
+
+        round.setGameId( keyHolder.getKey().intValue() );
+        return round;
+    }
+
+    @Override
+    public boolean finishGame( Game game )
+    {
+        final String sql = "UPDATE game SET finished = 1 WHERE id = ?;";
+
+        return jdbcTemplate.update( sql, game.getGameId() ) > 0;
+    }
+
+    @Override
     public List<Game> getAllGames()
     {
         final String sqlQuery = "SELECT id, units, tens, hundreds, thousands, answer, finished FROM game;";
@@ -82,7 +115,6 @@ public class GuessNumDaoDBImpl implements GuessNumDao
             return gameObj;
         }
     }
-
 
     //TODO: create RowMapper class for Round.
 }
