@@ -1,5 +1,6 @@
 package com.sg.guessnum.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Round
@@ -9,6 +10,10 @@ public class Round
     private int userGuess;
     private String roundResultsString;
     private LocalDateTime timestamp;
+
+    public Round()
+    {
+    }
 
     public Round( int gameId, int userGuess, int exactMatches, int partialMatches )
     {
@@ -46,5 +51,30 @@ public class Round
     public LocalDateTime getTimestamp()
     {
         return timestamp;
+    }
+
+    public void setRoundId( int roundId )
+    {
+        this.roundId = roundId;
+    }
+
+    public void setUserGuess( int userGuess )
+    {
+        this.userGuess = userGuess;
+    }
+
+    public void setRoundResultsString( String roundResultsString )
+    {
+        this.roundResultsString = roundResultsString;
+    }
+
+    public void setTimestamp( LocalDateTime timestamp )
+    {
+        this.timestamp = timestamp;
+    }
+
+    public void setTimestamp( Timestamp timestamp )
+    {
+        this.timestamp = timestamp.toLocalDateTime();
     }
 }

@@ -71,7 +71,7 @@ public class GuessNumDaoDBImpl implements GuessNumDao
             return prepStatement;
         }, keyHolder );
 
-        round.setGameId( keyHolder.getKey().intValue() );
+        round.setRoundId( keyHolder.getKey().intValue() );
         return round;
     }
 
@@ -99,6 +99,14 @@ public class GuessNumDaoDBImpl implements GuessNumDao
         return jdbcTemplate.queryForObject( sql, new GameMapper(), id );
     }
 
+    @Override
+    public List<Round> findRoundsByGameId( int id )
+    {
+        final String sqlQuery = "SELECT roundId, gameId, userGuess, roundResultsString, timestamp FROM round " +
+            "WHERE gameId = ? ORDER BY timestamp DESC;";
+        return jdbcTemplate.query( sqlQuery, new RoundMapper(), id );
+    }
+
     private static final class GameMapper implements RowMapper<Game>
     {
         @Override
@@ -114,7 +122,22 @@ public class GuessNumDaoDBImpl implements GuessNumDao
             gameObj.setFinished( resultSet.getBoolean( "finished" ) );
             return gameObj;
         }
-    }
+    }//END of GameMapper
 
     //TODO: create RowMapper class for Round.
-}
+    private static final class RoundMapper implements RowMapper<Round>
+    {
+        @Override
+        public Round mapRow( ResultSet resultSet, int index ) throws SQLException
+        {
+            Round roundObj = new Round();
+            roundObj.setRoundId( resultSet.getInt( "roundId" ) );
+            roundObj.setGameId( resultSet.getInt( "gameId" ) );
+            roundObj.setUserGuess( resultSet.getInt( "userGuess" ) );
+            roundObj.setRoundResultsString( resultSet.getString( "roundResultsString" ) );
+            roundObj.setTimestamp( resultSet.getTimestamp( "timestamp" ) );
+            return roundObj;
+        }
+    }//END of RoundMapper
+
+}//END of GuessNumDaoDBImpl

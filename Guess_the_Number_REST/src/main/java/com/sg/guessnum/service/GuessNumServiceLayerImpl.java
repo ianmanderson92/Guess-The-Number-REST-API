@@ -170,7 +170,7 @@ public class GuessNumServiceLayerImpl implements GuessNumServiceLayer
 
     public int[] generateAnswerUnits()
     {
-        int[] unitsArray = {-1,-1,-1,-1}; //array that holds individual digits and answer.
+        int[] unitsArray = {-1,-1,-1,-1}; //array that holds individual digits.
         Random rand = new Random();
         unitsArray[0] = rand.nextInt(10);
         for (int i=1; i<4; i++)
@@ -185,5 +185,11 @@ public class GuessNumServiceLayerImpl implements GuessNumServiceLayer
             } while ( unitsArray[i] == -1 );
         }
         return unitsArray;
+    }
+
+    @Override
+    public List<Round> getAllRoundsByGame( int id )
+    {
+        return dao.findRoundsByGameId( id );
     }
 }

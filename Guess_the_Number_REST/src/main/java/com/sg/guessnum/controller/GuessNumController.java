@@ -15,8 +15,6 @@ import java.util.List;
 @RequestMapping("/api/guessnum")
 public class GuessNumController
 {
-    //TODO: access service layer only
-
     private final GuessNumServiceLayer service;
 
     public GuessNumController( GuessNumServiceLayer service )
@@ -60,6 +58,9 @@ public class GuessNumController
         return ResponseEntity.ok( foundGame );
     }
 
-    //@GetMapping( "/rounds/{gameId}" )
-
+    @GetMapping( "/rounds/{gameId}" )
+    public List<Round> getAllRoundsByGame( @PathVariable int gameId )
+    {
+        return service.getAllRoundsByGame( gameId );
+    }
 }

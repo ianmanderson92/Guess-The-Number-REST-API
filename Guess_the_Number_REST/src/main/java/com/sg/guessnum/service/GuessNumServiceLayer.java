@@ -15,4 +15,6 @@ public interface GuessNumServiceLayer
     public Round makeGuess( Guess userGuess );
 
     public Game startNewGame();
+
+    public List<Round> getAllRoundsByGame( int id );
 }

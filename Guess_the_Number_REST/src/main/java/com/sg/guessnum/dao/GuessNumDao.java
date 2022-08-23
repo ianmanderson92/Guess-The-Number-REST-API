@@ -16,6 +16,8 @@ public interface GuessNumDao
 
     public Game findGameById( int id );
 
+    public List<Round> findRoundsByGameId( int id );
+
     public List<Game> getAllGames();
 
 }
