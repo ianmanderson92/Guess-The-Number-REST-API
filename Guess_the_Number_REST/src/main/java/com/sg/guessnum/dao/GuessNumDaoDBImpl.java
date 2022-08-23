@@ -57,6 +57,15 @@ public class GuessNumDaoDBImpl implements GuessNumDao
         return jdbcTemplate.query( sqlQuery, new GameMapper() );
     }
 
+    @Override
+    public Game findGameById( int id )
+    {
+        final String sql = "SELECT id, units, tens, hundreds, thousands, answer, finished " +
+            "FROM game WHERE id = ?;";
+
+        return jdbcTemplate.queryForObject( sql, new GameMapper(), id );
+    }
+
     private static final class GameMapper implements RowMapper<Game>
     {
         @Override
@@ -74,5 +83,6 @@ public class GuessNumDaoDBImpl implements GuessNumDao
         }
     }
 
-    //TODO: create RowMapper class for Guess.
+
+    //TODO: create RowMapper class for Round.
 }

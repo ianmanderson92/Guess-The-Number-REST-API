@@ -43,6 +43,21 @@ public class GuessNumServiceLayerImpl implements GuessNumServiceLayer
     }
 
     @Override
+    public Game getGameById( int id )
+    {
+        Game foundGame = dao.findGameById( id );
+        if ( !foundGame.isFinished() )
+        {
+            foundGame.setUnits( 0 );
+            foundGame.setTens( 0 );
+            foundGame.setHundreds( 0 );
+            foundGame.setThousands( 0 );
+            foundGame.setAnswer( 0 );
+        }
+        return foundGame;
+    }
+
+    @Override
     public Game startNewGame()
     {
         int[] unitsArray = generateAnswerUnits();

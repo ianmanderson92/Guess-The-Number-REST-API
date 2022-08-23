@@ -8,5 +8,7 @@ public interface GuessNumServiceLayer
 {
     public List<Game> getAllGames();
 
+    public Game getGameById( int id );
+
     public Game startNewGame();
 }

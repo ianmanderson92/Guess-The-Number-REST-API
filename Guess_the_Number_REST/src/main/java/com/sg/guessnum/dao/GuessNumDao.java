@@ -9,6 +9,8 @@ public interface GuessNumDao
 
     public Game addGame( Game game );
 
+    public Game findGameById( int id );
+
     public List<Game> getAllGames();
 
 }

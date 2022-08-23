@@ -1,17 +1,12 @@
 package com.sg.guessnum.controller;
 
-import com.sg.guessnum.dao.GuessNumDao;
 import com.sg.guessnum.dto.Game;
 import com.sg.guessnum.service.GuessNumServiceLayer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 
 @RestController
@@ -28,15 +23,32 @@ public class GuessNumController
     }
 
     @PostMapping( "/begin" )
-    public Game startNewGame()
+    public ResponseEntity<String> startNewGame()
     {
-        return service.startNewGame();
+        Game newGame = service.startNewGame();
+        if ( newGame == null )
+        {
+            return new ResponseEntity( null, HttpStatus.EXPECTATION_FAILED );
+        }
+        return new ResponseEntity<String>( "Game created with ID: " + String.valueOf( newGame.getGameId() )
+            , HttpStatus.CREATED );
     }
 
     @GetMapping( "/game" )
     public List<Game> getAllGames()
     {
         return service.getAllGames();
+    }
+
+    @GetMapping( "/game/{gameId}")
+    public ResponseEntity<Game> getGameById( @PathVariable int gameId )
+    {
+        Game foundGame = service.getGameById( gameId );
+        if ( foundGame == null )
+        {
+            return new ResponseEntity( null, HttpStatus.NOT_FOUND );
+        }
+        return ResponseEntity.ok( foundGame );
     }
 
 
