@@ -124,7 +124,6 @@ public class GuessNumDaoDBImpl implements GuessNumDao
         }
     }//END of GameMapper
 
-    //TODO: create RowMapper class for Round.
     private static final class RoundMapper implements RowMapper<Round>
     {
         @Override

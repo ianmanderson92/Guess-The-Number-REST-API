@@ -82,7 +82,6 @@ public class GuessNumServiceLayerImpl implements GuessNumServiceLayer
         //@roundResultsArray [0]: exactResults, [1]: partialResults.
         int[] roundResultsArray = calculateGuessResults( roundGame, userGuessUnitsArray );
 
-        //TODO: set game to finished if exactResults = 4.
         if ( roundResultsArray[0] == 4 )
         {
             dao.finishGame( roundGame );
@@ -115,7 +114,7 @@ public class GuessNumServiceLayerImpl implements GuessNumServiceLayer
         int exactMatches = 0;
         int partialMatches = 0;
         
-        if( roundGame.getThousands() == userGuessUnitsArray[ 0 ])
+        if( roundGame.getThousands() == userGuessUnitsArray[0])
         {
             exactMatches++;
         }

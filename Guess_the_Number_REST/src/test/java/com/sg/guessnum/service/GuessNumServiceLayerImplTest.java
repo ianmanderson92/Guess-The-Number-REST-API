@@ -14,6 +14,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO: make service layers only test bussiness logic of service layer. set up dao stub for testing.
+//TODO: answer generation, obfiscation of answer, and timestamps.
+
 @ExtendWith( SpringExtension.class )
 @SpringBootTest
 @Sql("classpath:test_db_init_script.sql") //causes the sql script to run before every test so the testDb is consistent.
